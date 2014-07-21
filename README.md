@@ -14,20 +14,18 @@
 这些工作包括大家熟悉的封装，command管理，报告自定义，甚至是通信......等等工作。
 lub希望可以做到：当你使用这个"润滑剂"时，你感受到了lettuce的BDD魅力。
 
+### 安装依赖
+
+```python
+pip install -r requirements.txt
+```
+
 ### 安装Lub
 
 ```python
 python setup.py install
 ```
-将会自动安装下面这三个依赖。
-
-### 依赖项
-
-```python
-lettuce
-appium
-selenium
-```
+注：将会自动安装lettuce
 
 ### Quick Start
 
@@ -75,20 +73,19 @@ from lettuce import *
 
 @step(u'打开 "(.*)"')
 def openurl(step,url):
-    world.browser.get(url)
+    lubget(world.browser,url)
 
 @step(u'在 "(.*)" 为 "(.*)" 的框中输入 "(.*)"')
 def typekey(step,typename,typekey,typeval):
-    lubfind(world.browser,typename,typekey).send_keys(typeval)
+    lubinput(lubfind(world.browser,typename,typekey),typeval)
 
 @step(u'点击 "(.*)" 为 "(.*)" 的按钮')
 def clickelem(step,typename,typekey):
-    lubfind(world.browser,typename,typekey).click()
+    lubclick(lubfind(world.browser,typename,typekey))
 ```
 
 这里，我们使用了lub封装的一些方法。
-这里的world是lettuce提供的一个"世界"，很形象的说法，你可以在全局控制中的一开始就将我们的webdriver实例放入这个"世界"里。
-在steps中，我们只需要去拿就可以了。
+world是threading.local的一个实例，他只在当前线程保存值。
 
 我们来看看全局控制terrain.py里有什么有趣的东西：
 注：terrain是特殊的py，它将最优先运行：
@@ -107,6 +104,8 @@ def startupdriver(scenario):
 terrain中，我用了装饰器，非常实用，他们的全部内容可以参见lettuce这里
 [lettuce terrain](http://lettuce.it/reference/terrain.html#reference-terrain "lettuce terrain")
 
+demo和例子可以在lubdemo目录下找到。
+
 #### step4 运行！
 
 你可以直接使用下面的命令快速运行你的用例集，注意，需要在当前结构目录下运行
@@ -116,7 +115,7 @@ terrain中，我用了装饰器，非常实用，他们的全部内容可以参�
 lub -r normal
 ```
 
-#### 扩展及其他
+#### 文档&扩展&其他
 
 待补充
 
